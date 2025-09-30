@@ -14,18 +14,18 @@ Go for JS Developers
 ╚═════╝  ╚═════╝    ╚═╝╚═╝╚═╝╚═╝     ╚══╝╚══╝ ╚═╝  ╚═╝   ╚═╝   
                                                                
 ```
+<!-- speaker_note: Obvously not for front end -->
 <!-- pause -->
-```markdown +no_background {all|1}
-1. Simplicity Over Abstraction
+```markdown +no_background {all|1|3|5|7|all}
+1. Better concurrency support
 
-2. Standard Library
+2. Faster single thread performance
 
-3. Testing & Profiling
+3. Lower memory overheads
 
-4. Error Handling
-
-5. Concurrency
+4. Lower running costs
 ```
+<!-- speaker_note: These are reasons for many languages... -->
 <!-- alignment: center -->
 <!-- end_slide -->
 ## Simplicity...
@@ -43,17 +43,15 @@ public class HelloWorld {
     public static void main(String[] args) {
         System.out.println("Hello, World!");
     }
-    }
+  }
 ```
 <!-- pause -->
 C#
 ```java +line_numbers
 using System;
 
-public class Program
-{
-    public static void Main(string[] args)
-    {
+public class Program {
+    public static void Main(string[] args) {
         Console.WriteLine("Hello, World!");
     }
 }
@@ -64,7 +62,7 @@ C++
 ```c +line_numbers
 #include <iostream> 
 
-int main() 
+int main() {
     std::cout << "Hello World!" << std::endl; 
     return 0;
 }
@@ -76,7 +74,7 @@ fn main() {
     println!("Hello, world!");
 }
 ```
-^ Borrow checker complexity
+^ Borrow checker & async complexity overhead
 <!-- pause  -->
 <!-- alignment: center -->
 <!-- end_slide -->
@@ -125,6 +123,8 @@ export function sumFoos(foos: foo[]) {
 ```
 <!-- column: 1 -->
 ```go +line_numbers
+package hello
+
 type Foo struct {
 	numA int
 	numB int
@@ -142,20 +142,69 @@ func SumFoos(foos []Foo) int {
 ```
 <!-- end_slide -->
 <!-- alignment: center -->
-Simplicity
----
-<!-- alignment: left -->
-## Some more stuff about simplicity...
-
----
-<!-- alignment: center -->
-
-<!-- end_slide -->
-
-<!-- alignment: center -->
 Standard Library and Tooling
 ---
 <!-- alignment: left -->
 ## The Full Package
 ---
-![image:w:55%](images/meme3.gif)
+<!-- speaker_note: Go has a philosophy of no dependencies -->
+<!-- column_layout: [1, 1] -->
+<!-- column: 1 -->
+![image:w:100%](images/meme4.png)
+<!-- column: 0 -->
+### Tooling
+- go fmt: opinionated formatting built in. 
+- go mod: dependency management built in (no npm/yarn/lockfile drama).
+- go build: compiles to a single binary, no runtime needed.
+<!-- pause -->
+### Networking
+- Full featured http routing, middleware and file serving baked in
+<!-- pause -->
+### Testing, Profiling & Benchmarking
+- Comes with a full testing suite and coverage tools
+- Performance and memory profiling with Pprof
+<!-- pause -->
+### Type Safety
+- Simple and powerful type system
+- Build right into the compiler and LSP 
+<!-- pause -->
+### Plus more...
+- Powerful string/html templating
+- Full cryptography suite
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+<!-- alignment: left -->
+## Simple
+---
+
+```go +line_numbers
+	for _, f := range files {
+		if f.Name() == ".DS_Store" {
+			continue
+		}
+		resizeImg(f.Name())
+	}
+ 
+```
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+<!-- alignment: left -->
+## Simple
+---
+
+```go +line_numbers
+	for _, f := range files {
+		if f.Name() == ".DS_Store" {
+			continue
+		}
+		resizeImg(f.Name())
+	}
+```
+<!-- pause -->
+<!-- column_layout: [1, 2] -->
+<!-- column: 0 -->
+#### Don't communicate by sharing memory, share memory by communicating.
