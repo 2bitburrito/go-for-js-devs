@@ -260,7 +260,6 @@ Concurrency
 		res = append(res, <-ch)
 	}
 ```
-<!-- column: 1 -->
 ```go +line_numbers {all|4|all}
 func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   // Process the image...

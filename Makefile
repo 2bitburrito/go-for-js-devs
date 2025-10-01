@@ -1,13 +1,12 @@
 # Makefile for running different examples in talk
 
 
-img:
+img-go:
 	@echo "__Go Implementation__"
 	@echo " "
 	@cd code/go/src/image-concurrency/ && go run .
 
-	@echo " "
-	@echo " "
+img-js:
 	@echo "__JS Implementation__"
 	@echo " "
 	@cd code/ts/src/image-processing/ && node resizing.ts
