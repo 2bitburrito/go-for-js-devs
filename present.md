@@ -333,3 +333,9 @@ if err != nil {
   }
 }
 ```
+<!-- end_slide -->
+
+<!-- jump_to_middle -->
+<!-- alignment:  center -->
+Thanks
+---
