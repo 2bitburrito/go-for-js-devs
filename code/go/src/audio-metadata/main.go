@@ -100,7 +100,7 @@ func GetIxmlMetadata(params getMetadataParams) {
 				return
 			}
 			data = bytes.TrimRight(data, "\x00")
-			os.WriteFile(fmt.Sprintf("./outputs/%s.xml", params.fileName), data, 0755)
+			os.WriteFile(fmt.Sprintf("./outputs/%s.xml", params.fileName), data, 0o755)
 			ixml, err := ParseiXML(data)
 			if err != nil {
 				fmt.Println("ERROR while parsing iXML for: ", params.fileName, err.Error())

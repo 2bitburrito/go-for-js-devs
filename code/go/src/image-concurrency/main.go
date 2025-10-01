@@ -136,7 +136,7 @@ func main() {
 	if err != nil {
 		panic(err)
 	}
-	os.Mkdir(outDir, 0755)
+	os.Mkdir(outDir, 0o755)
 	files, err := os.ReadDir(inDir)
 	if err != nil {
 		panic(err)

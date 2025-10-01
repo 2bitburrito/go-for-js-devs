@@ -23,4 +23,9 @@ scraper:
 	@echo " "
 	@cd code/ts/src/web-scraper/ && node webscraper-concurrent.ts
 
-# .PHONY: img scraper
+errors:
+	@echo "__Go Error Checks__"
+	@echo " "
+	@cd code/go/src/errors/ && go run .
+
+# .PHONY: img scraper errors

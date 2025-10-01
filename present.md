@@ -78,7 +78,7 @@ fn main() {
 <!-- pause  -->
 <!-- alignment: center -->
 <!-- end_slide -->
-## Simplicity...
+## Clear is better than Clever
 
 ---
 ![image:w:55%](images/meme2.jpg)
@@ -152,9 +152,10 @@ Standard Library and Tooling
 ![image:w:100%](images/meme4.png)
 <!-- column: 0 -->
 ### Tooling
+- go build: compiles to a single binary, no runtime needed.
+- go's GC: Has garbage collection
 - go fmt: highly opinionated (unconfigurable) formatting built in. 
 - go mod: dependency management 
-- go build: compiles to a single binary, no runtime needed.
 <!-- pause -->
 ### Networking
 - Full featured http routing, middleware and file serving 
@@ -194,15 +195,7 @@ Concurrency
 ```
 <!-- pause -->
 <!-- column: 0 -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
+<!-- new_lines: 9 -->
 #### Parallel.. However...
 
 <!-- column: 1 -->
@@ -213,10 +206,7 @@ Concurrency
 ```
 <!-- pause -->
 <!-- column: 0 -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
-<!-- new_line -->
+<!-- new_lines: 5 -->
 #### Parallel
 <!-- column: 1 -->
 ```go +line_numbers {all|1|4|5|7|all}
@@ -249,9 +239,13 @@ func resizeImgWithMutex(path os.DirEntry, wg *sync.WaitGroup, result *results) {
 	result.m.Unlock()
 }
 ```
-<!-- pause -->
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+<!-- alignment: left -->
+---
 ##### Don't communicate by sharing memory, share memory by communicating.
-<!-- pause -->
 <!-- column_layout: [1,1] -->
 <!-- column: 0 -->
 ```go +line_numbers {all|1|5|8-9|all}
@@ -279,5 +273,63 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
 Error Handling
 ---
 <!-- alignment: left -->
+## Errors Are Values
 ---
+![](images/meme1.png)
+```go +line_numbers
+res, err := SomeDangerousFunction()
+if err != nil {
+  //... Handle the error
+  log.Fatalf("failed to run dangerous: %v", err)
+}
+```
+<!-- end_slide -->
+<!-- alignment: center -->
+Error Handling
+---
+<!-- alignment: left -->
+## Errors Are Values
+---
+```go 
+// The error built-in interface type is the conventional interface for
+// representing an error condition, with the nil value representing no error.
+type error interface {
+	Error() string
+}
+```
+<!-- pause -->
+```go +line_numbers {all|5|all}
+type CustomError struct {
+  message string
+}
 
+func (e *CustomError) Error() string {
+	return fmt.Println("this is a custom error: ", e.message)
+}
+```
+<!-- end_slide -->
+<!-- alignment: center -->
+Error Handling
+---
+```go +line_numbers {all|6|all}
+type HTTPError struct {
+	Code int
+	Msg  string
+}
+
+func (e *HTTPError) Error() string {
+	return fmt.Println("http: ", e.Code, " message: " e.Msg)
+}
+```
+<!-- pause -->
+```go +line_numbers {all|1-2|3-4|5|all}
+profile, err := GetProfile("badID")
+if err != nil {
+  var httpErr *HTTPError
+  if errors.As(err, &httpErr) {
+    log.Printf("got HTTP error: %d\n", httpErr.Code)
+  } else {
+    return err
+  }
+}
+```
