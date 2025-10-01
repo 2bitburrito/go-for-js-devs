@@ -1,0 +1,26 @@
+# Makefile for running different examples in talk
+
+
+img:
+	@echo "__Go Implementation__"
+	@echo " "
+	@cd code/go/src/image-concurrency/ && go run .
+
+	@echo " "
+	@echo " "
+	@echo "__JS Implementation__"
+	@echo " "
+	@cd code/ts/src/image-processing/ && node resizing.ts
+
+scraper:
+	@echo "__Go Implementation__"
+	@echo " "
+	@cd code/go/src/web-scraper/ && go run .
+
+	@echo " "
+	@echo " "
+	@echo "__JS Implementation__"
+	@echo " "
+	@cd code/ts/src/web-scraper/ && node webscraper-concurrent.ts
+
+# .PHONY: img scraper

@@ -3,26 +3,21 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"net/http"
 	"os"
-	"sync"
 	"time"
 )
 
-func fetchURL(url string, wg *sync.WaitGroup) {
-	defer wg.Done()
-
-	start := time.Now()
+func fetchURL(url string, ch chan bool) {
 	resp, err := http.Get(url)
 	if err != nil {
 		fmt.Printf("✗ %s: %v\n", url, err)
+		ch <- false
 		return
 	}
 	defer resp.Body.Close()
 
-	io.ReadAll(resp.Body) // Read the body
-	fmt.Printf("Done! %s (%v)\n", url, time.Since(start))
+	ch <- resp.StatusCode == 200
 }
 
 func main() {
@@ -37,16 +32,22 @@ func main() {
 		panic("couldn't decode json: " + err.Error())
 	}
 
-	fmt.Println("Go Concurrent Scraping:")
 	start := time.Now()
 
-	var wg sync.WaitGroup
+	ch := make(chan bool)
 
 	for _, url := range urls {
-		wg.Add(1)
-		go fetchURL(url, &wg)
+		go fetchURL(url, ch)
 	}
 
-	wg.Wait()
+	count := 0
+	for range len(urls) {
+		if <-ch {
+			count++
+		}
+	}
+	close(ch)
+
+	fmt.Printf("Scraped a total of %d URLs of %d\n", count, len(urls))
 	fmt.Printf("Total time: %v\n", time.Since(start))
 }

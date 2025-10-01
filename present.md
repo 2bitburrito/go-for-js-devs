@@ -95,7 +95,6 @@ export function sayHello(name: string) {
   console.log("Hello", name);
 }
 ```
-
 <!-- column: 1 -->
 GO
 ```go +line_numbers
@@ -153,12 +152,13 @@ Standard Library and Tooling
 ![image:w:100%](images/meme4.png)
 <!-- column: 0 -->
 ### Tooling
-- go fmt: opinionated formatting built in. 
-- go mod: dependency management built in (no npm/yarn/lockfile drama).
+- go fmt: highly opinionated (unconfigurable) formatting built in. 
+- go mod: dependency management 
 - go build: compiles to a single binary, no runtime needed.
 <!-- pause -->
 ### Networking
-- Full featured http routing, middleware and file serving baked in
+- Full featured http routing, middleware and file serving 
+- TCP, UDP, SMTP, etc
 <!-- pause -->
 ### Testing, Profiling & Benchmarking
 - Comes with a full testing suite and coverage tools
@@ -176,35 +176,108 @@ Standard Library and Tooling
 Concurrency
 ---
 <!-- alignment: left -->
-## Simple
 ---
 
-```go +line_numbers
-	for _, f := range files {
-		if f.Name() == ".DS_Store" {
-			continue
-		}
-		resizeImg(f.Name())
+<!-- column_layout: [1, 99] -->
+<!-- column: 0 -->
+#### Sequential
+<!-- column: 1 -->
+```go +line_numbers {all|1|6-8|all}
+	files, err := os.ReadDir(inDir)
+	if err != nil {
+		panic(err)
 	}
- 
+
+	for _, f := range files {
+		resizeImg(f)
+	}
+```
+<!-- pause -->
+<!-- column: 0 -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+#### Parallel.. However...
+
+<!-- column: 1 -->
+```go +line_numbers {all|2|all}
+	for _, f := range files {
+		go resizeImg(f)
+	}
+```
+<!-- pause -->
+<!-- column: 0 -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+<!-- new_line -->
+#### Parallel
+<!-- column: 1 -->
+```go +line_numbers {all|1|4|5|7|all}
+	wg := sync.WaitGroup{}
+
+	for _, f := range files {
+		wg.Add(1)
+		go resizeImg(f, &wg)
+	}
+	wg.Wait()
 ```
 <!-- end_slide -->
 <!-- alignment: center -->
 Concurrency
 ---
 <!-- alignment: left -->
-## Simple
 ---
+##### Using A Mutex
+```go +line_numbers {all|1-4|9-11|all}
+type results struct {
+	sizes []int64
+	m     sync.Mutex
+}
 
-```go +line_numbers
-	for _, f := range files {
-		if f.Name() == ".DS_Store" {
-			continue
-		}
-		resizeImg(f.Name())
-	}
+func resizeImgWithMutex(path os.DirEntry, wg *sync.WaitGroup, result *results) {
+  // Process the image...
+
+	result.m.Lock()
+	result.sizes = append(result.sizes, outImgFileInfo.Size())
+	result.m.Unlock()
+}
 ```
 <!-- pause -->
-<!-- column_layout: [1, 2] -->
+##### Don't communicate by sharing memory, share memory by communicating.
+<!-- pause -->
+<!-- column_layout: [1,1] -->
 <!-- column: 0 -->
-#### Don't communicate by sharing memory, share memory by communicating.
+```go +line_numbers {all|1|5|8-9|all}
+	ch := make(chan int64)
+    res := make([]int64, 0, len(files))
+
+	for _, f := range files {
+		go resizeImgWithChannel(f, ch)
+	}
+
+	for range len(files) {
+		res = append(res, <-ch)
+	}
+```
+<!-- column: 1 -->
+```go +line_numbers {all|4|all}
+func resizeImgWithChannel(path os.DirEntry, result chan int64) {
+  // Process the image...
+
+  result <- newImg.Size()
+}
+```
+<!-- end_slide -->
+<!-- alignment: center -->
+Error Handling
+---
+<!-- alignment: left -->
+---
+

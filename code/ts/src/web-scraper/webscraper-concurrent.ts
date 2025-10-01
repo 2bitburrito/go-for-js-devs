@@ -1,17 +1,14 @@
-import * as https from "https";
 import fs from "fs"
 
 function fetchURL(url: string) {
   return new Promise((resolve, reject) => {
-    const start = Date.now();
-    https.get(url, (res) => {
-      let data = '';
-      res.on('data', chunk => data += chunk);
-      res.on('end', () => {
-        console.log(`Done! ${url} (${Date.now() - start}ms)`);
-        resolve(data);
-      });
-    }).on('error', reject);
+    fetch(url, {
+      headers: {
+        "Accept": "image/*"
+      }
+    })
+      .then((res) => res.ok ? resolve(true) : reject(res.url))
+      .catch(() => reject(false))
   });
 }
 
@@ -22,11 +19,13 @@ async function scrapeAll() {
 
   console.time('Node.js Concurrent');
 
-  // This is the "complex" part in Node.js
   const promises = urls.map(url => fetchURL(url));
-  await Promise.all(promises);
+  const res = await Promise.allSettled(promises);
 
+  const successCount = res.filter((r) => r.status == "fulfilled")
+  console.log(`Scraped a total of ${successCount.length} URLs of ${urls.length}`)
   console.timeEnd('Node.js Concurrent');
+
 }
 
 scrapeAll();
