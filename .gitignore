@@ -1,10 +1,7 @@
 **/*.wav.xml
 **/*.wav
 **/*.xml
-**/*.jpeg
-**/*.jpg
-**/*.png
-/out/
+**/out/
 .DS_STORE
 node_modules/
 main

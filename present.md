@@ -174,6 +174,70 @@ Standard Library and Tooling
 - Full cryptography suite
 <!-- end_slide -->
 <!-- alignment: center -->
+Error Handling
+---
+<!-- alignment: left -->
+## Errors Are Values
+---
+![](images/meme1.png)
+```go +line_numbers {all|2-5}
+res, err := SomeDangerousFunction()
+if err != nil {
+  //... Handle the error
+  log.Fatalf("failed to run dangerous: %v", err)
+}
+```
+<!-- speaker_note: locality of behaviour -->
+<!-- end_slide -->
+<!-- alignment: center -->
+Error Handling
+---
+<!-- alignment: left -->
+## Errors Are Values
+---
+```go 
+// The error built-in interface type is the conventional interface for
+// representing an error condition, with the nil value representing no error.
+type error interface {
+	Error() string
+}
+```
+<!-- pause -->
+```go +line_numbers {all|5|all}
+type CustomError struct {
+  message string
+}
+
+func (e *CustomError) Error() string {
+	return fmt.Println("this is a custom error: ", e.message)
+}
+```
+<!-- end_slide -->
+<!-- alignment: center -->
+Error Handling
+---
+<!-- new_lines: 7 -->
+```go +line_numbers {all|2|3-7|9-10|13-16|all}
+for {
+  msgType, msg, err := conn.ReadMessage()
+  if err != nil {
+    if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
+      log.Printf("client disconnected: %v", err)
+      return 
+    }
+
+    log.Printf("read error: %v", err)
+    continue
+  }
+
+  if err := handleMessage(msgType, msg); err != nil {
+    log.Printf("failed to handle message: %v", err)
+    continue
+  }
+}
+```
+<!-- end_slide -->
+<!-- alignment: center -->
 Concurrency
 ---
 <!-- alignment: left -->
@@ -222,25 +286,47 @@ Concurrency
 <!-- alignment: center -->
 Concurrency
 ---
-<!-- alignment: left -->
+![image:w:100%](drawn-images/1a.png)
+<!-- end_slide -->
+Concurrency
 ---
-##### Using A Mutex
-```go +line_numbers {all|1-4|9-11|all}
-type results struct {
-	sizes []int64
-	m     sync.Mutex
-}
-
-func resizeImgWithMutex(path os.DirEntry, wg *sync.WaitGroup, result *results) {
-  // Process the image...
-
-	result.m.Lock()
-	result.sizes = append(result.sizes, outImgFileInfo.Size())
-	result.m.Unlock()
-}
-```
+![image:w:100%](drawn-images/1b.png)
 <!-- end_slide -->
 <!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/1c.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2a.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2b.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2c.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2d.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2e.png)
+<!-- end_slide -->
+<!-- alignment: center -->
+Concurrency
+---
+![image:w:100%](drawn-images/2f.png)
+<!-- end_slide -->
 Concurrency
 ---
 <!-- alignment: left -->
@@ -248,6 +334,7 @@ Concurrency
 ##### Don't communicate by sharing memory, share memory by communicating.
 <!-- column_layout: [1,1] -->
 <!-- column: 0 -->
+<!-- pause -->
 ```go +line_numbers {all|1|5|8-9|all}
 	ch := make(chan int64)
     res := make([]int64, 0, len(files))
@@ -265,71 +352,6 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   // Process the image...
 
   result <- newImg.Size()
-}
-```
-<!-- end_slide -->
-<!-- alignment: center -->
-Error Handling
----
-<!-- alignment: left -->
-## Errors Are Values
----
-![](images/meme1.png)
-```go +line_numbers
-res, err := SomeDangerousFunction()
-if err != nil {
-  //... Handle the error
-  log.Fatalf("failed to run dangerous: %v", err)
-}
-```
-<!-- end_slide -->
-<!-- alignment: center -->
-Error Handling
----
-<!-- alignment: left -->
-## Errors Are Values
----
-```go 
-// The error built-in interface type is the conventional interface for
-// representing an error condition, with the nil value representing no error.
-type error interface {
-	Error() string
-}
-```
-<!-- pause -->
-```go +line_numbers {all|5|all}
-type CustomError struct {
-  message string
-}
-
-func (e *CustomError) Error() string {
-	return fmt.Println("this is a custom error: ", e.message)
-}
-```
-<!-- end_slide -->
-<!-- alignment: center -->
-Error Handling
----
-```go +line_numbers {all|6|all}
-type HTTPError struct {
-	Code int
-	Msg  string
-}
-
-func (e *HTTPError) Error() string {
-	return fmt.Println("http: ", e.Code, " message: " e.Msg)
-}
-```
-<!-- pause -->
-```go +line_numbers {all|1-2|3-4|5|all}
-profile, err := GetProfile("badID")
-if err != nil {
-  var httpErr *HTTPError
-  if errors.As(err, &httpErr) {
-    log.Printf("got HTTP error: %d\n", httpErr.Code)
-  } else {
-    return err
-  }
 }
 ```
 <!-- end_slide -->
