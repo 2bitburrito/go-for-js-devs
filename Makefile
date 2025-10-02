@@ -1,6 +1,4 @@
-# Makefile for running different examples in talk
-
-
+# Makefile for running different examples from talk
 img-go:
 	@echo "__Go Implementation__"
 	@echo " "
@@ -11,13 +9,12 @@ img-js:
 	@echo " "
 	@cd code/ts/src/image-processing/ && node resizing.ts
 
-scraper:
+scraper-go:
 	@echo "__Go Implementation__"
 	@echo " "
 	@cd code/go/src/web-scraper/ && go run .
 
-	@echo " "
-	@echo " "
+scraper-js:
 	@echo "__JS Implementation__"
 	@echo " "
 	@cd code/ts/src/web-scraper/ && node webscraper-concurrent.ts

@@ -27,8 +27,7 @@ func main() {
 		panic("couldn't read file: " + err.Error())
 	}
 
-	err = json.Unmarshal(jsonFileBytes, &urls)
-	if err != nil {
+	if err = json.Unmarshal(jsonFileBytes, &urls); err != nil {
 		panic("couldn't decode json: " + err.Error())
 	}
 

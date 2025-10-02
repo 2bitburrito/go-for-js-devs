@@ -186,5 +186,4 @@ func main() {
 		res = append(res, <-ch)
 	}
 	close(ch)
-	// fmt.Println("Time for parallel image resize with channel messages: ", time.Since(start))
 }
