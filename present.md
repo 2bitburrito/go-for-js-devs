@@ -429,7 +429,6 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
 Thanks
 ---
 ---
-<!-- jump_to_middle -->
 <!-- column_layout: [1,1,1] -->
 <!-- column: 0 -->
 ![image:w:100%](images/gopher.png)
@@ -437,5 +436,7 @@ Thanks
 Questions?
 ---
 <!-- column: 2 -->
-# Reach out and say Hi
-![image:w:25%](images/linkd-qr.JPG)
+# Reach out and say Hi!
+![image:w:39%](images/linkd-qr.png)
+# Check out this repo:
+![image:w:39%](images/repo-qr.png)
