@@ -370,6 +370,8 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   result <- newImg.Size()
 }
 ```
+<!-- column: 1 -->
+![image:w:100%](drawn-images/3a.png)
 <!-- end_slide -->
 Concurrency
 ---
@@ -397,6 +399,8 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   result <- newImg.Size()
 }
 ```
+<!-- column: 1 -->
+![image:w:100%](drawn-images/3c.png)
 <!-- end_slide -->
 Concurrency
 ---
@@ -405,7 +409,7 @@ Concurrency
 ##### Don't communicate by sharing memory, share memory by communicating.
 <!-- column_layout: [1,1] -->
 <!-- column: 0 -->
-```go +line_numbers {all}
+```go +line_numbers {9}
 	ch := make(chan int64)
     res := make([]int64, 0, len(files))
 
@@ -417,13 +421,15 @@ Concurrency
 		res = append(res, <-ch)
 	}
 ```
-```go +line_numbers {all}
+```go +line_numbers {3}
 func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   // Process the image...
 
   result <- newImg.Size()
 }
 ```
+<!-- column: 1 -->
+![image:w:100%](drawn-images/3c.png)
 <!-- end_slide -->
 <!-- alignment:  center -->
 Thanks
