@@ -20,6 +20,9 @@ Hello
 #  Love Coffee
 
 <!-- end_slide -->
+Go For JS Devs
+---
+--- 
 <!-- pause -->
 ```python +no_background
 ██████╗ ██╗   ██╗████████╗          ██╗    ██╗██╗  ██╗██╗   ██╗
@@ -94,11 +97,6 @@ fn main() {
 <!-- pause  -->
 <!-- alignment: center -->
 <!-- end_slide -->
-## Clear is better than Clever
-
----
-![image:w:55%](images/meme2.jpg)
-<!-- end_slide -->
 Syntax
 ---
 ---
@@ -156,6 +154,11 @@ func SumFoos(foos []Foo) int {
 }
 ```
 <!-- end_slide -->
+## Clear is better than Clever
+
+---
+![image:w:55%](images/meme2.jpg)
+<!-- end_slide -->
 <!-- alignment: center -->
 Standard Library and Tooling
 ---
@@ -206,60 +209,12 @@ if err != nil {
 <!-- speaker_note: locality of behaviour -->
 <!-- end_slide -->
 <!-- alignment: center -->
-Error Handling
----
-<!-- alignment: left -->
-## Errors Are Values
----
-```go 
-// The error built-in interface type is the conventional interface for
-// representing an error condition, with the nil value representing no error.
-type error interface {
-	Error() string
-}
-```
-<!-- pause -->
-```go +line_numbers {all|5|all}
-type CustomError struct {
-  message string
-}
-
-func (e *CustomError) Error() string {
-	return fmt.Println("this is a custom error: ", e.message)
-}
-```
-<!-- end_slide -->
-<!-- alignment: center -->
-Error Handling
----
-<!-- new_lines: 7 -->
-```go +line_numbers {all|2|3-7|9-10|13-16|all}
-for {
-  msgType, msg, err := conn.ReadMessage()
-  if err != nil {
-    if websocket.IsCloseError(err, websocket.CloseNormalClosure, websocket.CloseGoingAway) {
-      log.Printf("client disconnected: %v", err)
-      return 
-    }
-
-    log.Printf("read error: %v", err)
-    continue
-  }
-
-  if err := handleMessage(msgType, msg); err != nil {
-    log.Printf("failed to handle message: %v", err)
-    continue
-  }
-}
-```
-<!-- end_slide -->
-<!-- alignment: center -->
 Concurrency
 ---
 <!-- alignment: left -->
 ---
 
-<!-- column_layout: [1, 99] -->
+<!-- column_layout: [1, 80] -->
 <!-- column: 0 -->
 #### Sequential
 <!-- column: 1 -->
@@ -298,6 +253,8 @@ Concurrency
 	}
 	wg.Wait()
 ```
+<!-- end_slide -->
+![image:w:100%](images/meme-pray.jpg)
 <!-- end_slide -->
 <!-- alignment: center -->
 Concurrency

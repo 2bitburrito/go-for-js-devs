@@ -25,7 +25,7 @@ func SomeDangeriousFunction() (string, error) {
 }
 
 func main() {
-	res, err := SomeDangeriousFunction()
+	_, err := SomeDangeriousFunction()
 	if err != nil {
 		//... Handle the error
 		log.Fatalf("couldn't run func: %v", err)
