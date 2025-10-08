@@ -2,8 +2,24 @@
 theme: 
   name: "catppuccin-mocha"
 ---
-Go for JS Developers
+Hello
 ---
+
+--- 
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+![image:w:100%](images/me.jpg)
+<!-- column: 1 -->
+<!-- new_lines: 7 -->
+#  Audio Engineer -> Software Engineer
+<!-- new_line -->
+<!-- new_line -->
+#  Obsessed with Building
+<!-- new_line -->
+<!-- new_line -->
+#  Love Coffee
+
+<!-- end_slide -->
 <!-- pause -->
 ```python +no_background
 ██████╗ ██╗   ██╗████████╗          ██╗    ██╗██╗  ██╗██╗   ██╗
@@ -335,7 +351,7 @@ Concurrency
 <!-- column_layout: [1,1] -->
 <!-- column: 0 -->
 <!-- pause -->
-```go +line_numbers {all|1|5|8-9|all}
+```go +line_numbers {all|1|5}
 	ch := make(chan int64)
     res := make([]int64, 0, len(files))
 
@@ -347,7 +363,7 @@ Concurrency
 		res = append(res, <-ch)
 	}
 ```
-```go +line_numbers {all|4|all}
+```go +line_numbers {all}
 func resizeImgWithChannel(path os.DirEntry, result chan int64) {
   // Process the image...
 
@@ -355,8 +371,71 @@ func resizeImgWithChannel(path os.DirEntry, result chan int64) {
 }
 ```
 <!-- end_slide -->
+Concurrency
+---
+<!-- alignment: left -->
+---
+##### Don't communicate by sharing memory, share memory by communicating.
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+```go +line_numbers {3}
+	ch := make(chan int64)
+    res := make([]int64, 0, len(files))
 
-<!-- jump_to_middle -->
+	for _, f := range files {
+		go resizeImgWithChannel(f, ch)
+	}
+
+	for range len(files) {
+		res = append(res, <-ch)
+	}
+```
+```go +line_numbers {4}
+func resizeImgWithChannel(path os.DirEntry, result chan int64) {
+  // Process the image...
+
+  result <- newImg.Size()
+}
+```
+<!-- end_slide -->
+Concurrency
+---
+<!-- alignment: left -->
+---
+##### Don't communicate by sharing memory, share memory by communicating.
+<!-- column_layout: [1,1] -->
+<!-- column: 0 -->
+```go +line_numbers {all}
+	ch := make(chan int64)
+    res := make([]int64, 0, len(files))
+
+	for _, f := range files {
+		go resizeImgWithChannel(f, ch)
+	}
+
+	for range len(files) {
+		res = append(res, <-ch)
+	}
+```
+```go +line_numbers {all}
+func resizeImgWithChannel(path os.DirEntry, result chan int64) {
+  // Process the image...
+
+  result <- newImg.Size()
+}
+```
+<!-- end_slide -->
 <!-- alignment:  center -->
 Thanks
 ---
+---
+<!-- jump_to_middle -->
+<!-- column_layout: [1,1,1] -->
+<!-- column: 0 -->
+![image:w:100%](images/gopher.png)
+<!-- column: 1 -->
+Questions?
+---
+<!-- column: 2 -->
+# Reach out and say Hi
+![image:w:25%](images/linkd-qr.JPG)
